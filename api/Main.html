@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steak House </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        .menu-item {
+            background-color: hsla(296, 97%, 38%, 0.71);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+            padding: 15px;
+            transition: transform 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+        .menu-item:hover {
+            transform: scale(1.05);
+        }
+        .menu-item h3 {
+            font-size: 18px;
+        }
+        .menu-item2 {
+            background-color: hsl(51, 100%, 50%);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+            padding: 15px;
+            transition: transform 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+        .menu-item2:hover {
+            transform: scale(1.05);
+        }
+        .menu-item2 h3 {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Steak House</h1>
+
+    <div class="container">
+        <a href="http://localhost/ProjectDB/api/reservation.html" class="menu-item">
+            <h3>Reservation</h3>
+        </a>
+
+        <a href="http://localhost/ProjectDB/api/delivery.html" class="menu-item2">
+            <h3>Delivery</h3>
+        </a>
+    </div>
+
+</body>
+</html>

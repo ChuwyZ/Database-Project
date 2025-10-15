@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Table Reservation Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: inline-block;
+            border: 1px solid #888;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 7px;
+            width: 200px;
+            color: #fff;
+            font-size: 16px;
+        }
+        .reserved {
+            background: #ff4242;
+        }
+        .available {
+            background: #30ca60;
+        }
+        label, input {
+            display: block;
+            margin: 10px 0 5px 0;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        .back-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 20px;
+            text-align: center;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+        .submit-btn {
+            background-color: #28a745;
+            color: #fff;
+            font-size: 18px;
+            padding: 12px 38px;
+            border: none;
+            border-radius: 6px;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h2>Check Table Reservation Status</h2>
+    <form id="searchForm">
+        <label>Select a date</label>
+        <input type="date" id="dateInput" required>
+        <button type="submit" class="submit-btn">Check</button>
+    </form>
+    <div id="results"></div>
+
+    <script>
+        const jointableURL = "http://localhost/ProjectDB/api/restaurant/jointable.php";
+        const readreservationURL = "http://localhost/ProjectDB/api/restaurant/readreservation.php";
+
+        document.getElementById('searchForm').onsubmit = async function (e) {
+            e.preventDefault();
+
+            const date = document.getElementById('dateInput').value; // รูปแบบ '2025-10-15'
+            if (!date) {
+                document.getElementById('results').innerHTML = "<p>Please select a date.</p>";
+                return;
+            }
+
+            try {
+                // ดึงข้อมูลโต๊ะและข้อมูลการจอง
+                const [tableRes, reservRes] = await Promise.all([
+                    fetch(jointableURL),
+                    fetch(readreservationURL)
+                ]);
+                if (!tableRes.ok || !reservRes.ok) throw new Error("Could not connect to API.");
+                const tables = await tableRes.json();
+                const reservations = await reservRes.json();
+
+                // หา tableID ที่ถูกจองในวันที่นั้น (bookingStatus เป็น "Reserved" เท่านั้น)
+                const reservedTableIDs = reservations
+                    .filter(r => r.bookingStatus === "Reserved" && r.reservationDate.substring(0, 10) === date)
+                    .map(r => r.tableID);
+
+                let html = "<h3>Reserved Tables</h3>";
+                let foundReserved = false;
+                tables.forEach(table => {
+                    if (reservedTableIDs.includes(table.TableID)) {
+                        html += `
+                        <div class="container reserved">
+                            <div><b>TableID:</b> ${table.TableID}</div>
+                            <div><b>Room Type:</b> ${table.RoomType}</div>
+                        </div>`;
+                        foundReserved = true;
+                    }
+                });
+                if (!foundReserved) html += "<div>No tables reserved on this date.</div>";
+
+                html += "<h3>Available Tables</h3>";
+                let foundAvailable = false;
+                tables.forEach(table => {
+                    if (!reservedTableIDs.includes(table.TableID)) {
+                        html += `
+                        <div class="container available">
+                            <div><b>TableID:</b> ${table.TableID}</div>
+                            <div><b>Room Type:</b> ${table.RoomType}</div>
+                        </div>`;
+                        foundAvailable = true;
+                    }
+                });
+                if (!foundAvailable) html += "<div>No tables available on this date.</div>";
+
+                document.getElementById('results').innerHTML = html;
+
+            } catch (err) {
+                document.getElementById('results').innerHTML =
+                    `<b>Error:</b> ${err.message}`;
+                console.error(err);
+            }
+        }
+    </script>
+    <a href="http://localhost/ProjectDB/api/main.html" class="back-btn">Back to Main Page</a>
+</body>
+</html>

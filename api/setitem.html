@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Set Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .menu-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+        .menu-item:hover {
+            transform: scale(1.05);
+        }
+        .food-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .food-quantity {
+            font-size: 16px;
+            color: #ff6347;
+        }
+        .back-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 20px;
+            text-align: center;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <h1 id="setNameTitle">Food Set Menu</h1>
+
+    <a href="setmenu.html" class="back-btn">Back to Menu</a> 
+
+    <div class="menu-container" id="menuContainer">
+    </div>
+
+    <script>
+        // ฟังก์ชันที่ใช้ดึงข้อมูลจาก API
+        function fetchSetMealItems() {
+            const setID = new URLSearchParams(window.location.search).get('id');
+            if (setID) {
+                fetch(`http://localhost/ProjectDB/api/client/readoneset.php?id=${setID}`)
+                    .then(response => response.json()) // แปลงผลลัพธ์จาก API เป็น JSON
+                    .then(data => {
+                        const menuContainer = document.getElementById('menuContainer');
+                        const setNameTitle = document.getElementById('setNameTitle');
+                        menuContainer.innerHTML = ''; // เคลียร์ข้อมูลเก่าออก
+
+                        if (data.length > 0) {
+                            // แสดงชื่อเซ็ทอาหารที่ได้รับ
+                            setNameTitle.innerHTML = `${data[0].setName}`;
+
+                            data.forEach(item => {
+                                // สร้าง HTML สำหรับแต่ละเมนูอาหาร
+                                const menuItem = document.createElement('div');
+                                menuItem.classList.add('menu-item');
+                                
+                                // ใส่ชื่ออาหารและจำนวน
+                                menuItem.innerHTML = `
+                                    <div class="food-name">${item.foodName}</div>
+                                    <div class="food-quantity">Quantity: ${item.quantity}</div>
+                                `;
+                                
+                                // เพิ่มรายการเมนูอาหารไปยัง container
+                                menuContainer.appendChild(menuItem);
+                            });
+                        } else {
+                            setNameTitle.innerHTML = "No Items Found in this Set";
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+            } else {
+                alert('Missing Set ID parameter.');
+            }
+        }
+
+        // เรียกใช้ฟังก์ชันดึงข้อมูลเมื่อโหลดหน้าเว็บ
+        window.onload = fetchSetMealItems;
+    </script>
+
+</body>
+</html>

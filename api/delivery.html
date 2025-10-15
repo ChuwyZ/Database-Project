@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Options</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        .menu-item {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+            padding: 15px;
+            transition: transform 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+        .menu-item:hover {
+            transform: scale(1.05);
+        }
+        .menu-item h3 {
+            font-size: 18px;
+        }
+        .food-menu {
+            background-color: hsl(41, 100%, 49%); /* สีเขียว */
+        }
+        .set-menu {
+            background-color: hsl(200, 100%, 50%); /* สีน้ำเงิน */
+        }
+        .back-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 20px;
+            text-align: center;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Menu Options</h1>
+
+    <div class="container">
+        
+        <a href="http://localhost/ProjectDB/api/foodmenu.html" class="menu-item food-menu">
+            <h3>Food Menu</h3>
+        </a>
+
+        <a href="http://localhost/ProjectDB/api/setmenu.html" class="menu-item set-menu">
+            <h3>Set Menu</h3>
+        </a>
+    </div>
+
+    <a href="http://localhost/ProjectDB/api/main.html" class="back-btn">Back to Main Page</a>
+
+</body>
+</html>
