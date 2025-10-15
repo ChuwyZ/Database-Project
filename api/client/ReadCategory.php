@@ -15,7 +15,7 @@ try {
     foreach ($conn->query($sql) as $row) {
         // สร้าง array สำหรับแต่ละ food item
         $category = array(
-            'foodItemID' => $row['CategoryID'],
+            'foodItemID' => $row['CategoryID'], 
             'foodName' => $row['CategoryName']
         );
         // เพิ่มข้อมูลลงใน array
@@ -35,4 +35,5 @@ try {
     ));
     die();
 }
+//test
 ?>

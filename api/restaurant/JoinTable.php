@@ -5,7 +5,6 @@ header("Content-Type: application/json; charset=UTF-8");
 include '../db.php';
 
 try {
-    // Query to get the room data, including availability
     $sql = "
         SELECT t.TableID, t.RoomID, rtc.RoomType, t.IsAvailable
         FROM tableroom t
